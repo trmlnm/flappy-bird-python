@@ -37,6 +37,7 @@ def draw_pipes(pipes):
 def check_collision(pipes):
     for pipe in pipes:
         if bird_rect.colliderect(pipe):
+            death_sound.play()
             return False
 
     if bird_rect.top <= -50 or bird_rect.bottom >= 450:
@@ -81,6 +82,7 @@ def update_highscore(score, high_score):
     return high_score
 
 
+pygame.mixer.pre_init(frequency=44100, size=32, channels=1, buffer=1024)
 pygame.init()
 
 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
@@ -102,8 +104,6 @@ bg_surface = pygame.image.load('assets/background-day.png').convert()
 floor_surface = pygame.image.load('assets/base.png').convert()
 floor_x_pos = 0
 
-# bird_surface = pygame.image.load('assets/bluebird-midflap.png').convert()
-# bird_rect = bird_surface.get_rect(center=(50, 256))
 
 bird_downflap = pygame.image.load('assets/bluebird-downflap.png').convert()
 bird_midflap = pygame.image.load('assets/bluebird-midflap.png').convert()
@@ -125,6 +125,11 @@ pipe_height = [200, 300, 400]
 game_over_surface = pygame.image.load('assets/message.png').convert_alpha()
 game_over_rect = game_over_surface.get_rect(center=(144, 256))
 
+flap_sound = pygame.mixer.Sound('sound/sfx_wing.wav')
+death_sound = pygame.mixer.Sound('sound/sfx_hit.wav')
+#score_sound = pygame.mixer.Sound('sound/sfx_point.wav')
+
+
 while True:
     for event in pygame.event.get():
 
@@ -138,6 +143,7 @@ while True:
                 # print("flap")
                 bird_movement = 0
                 bird_movement -= 6
+                flap_sound.play()
 
             if event.key == pygame.K_SPACE and game_active == False:
                 pipe_list.clear()
