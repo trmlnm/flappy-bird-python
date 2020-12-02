@@ -86,7 +86,7 @@ pygame.init()
 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
 clock = pygame.time.Clock()
 
-game_font = pygame.font.Font('04B_19.TTF', 40)
+game_font = pygame.font.Font('04B_19.TTF', 20)
 
 # Game Variables
 
@@ -109,7 +109,7 @@ bird_downflap = pygame.image.load('assets/bluebird-downflap.png').convert()
 bird_midflap = pygame.image.load('assets/bluebird-midflap.png').convert()
 bird_upflap = pygame.image.load('assets/bluebird-upflap.png').convert()
 bird_frames = [bird_downflap, bird_midflap, bird_upflap]
-bird_index = 2
+bird_index = 0
 bird_surface = bird_frames[bird_index]
 bird_rect = bird_surface.get_rect(center=(50, 256))
 
@@ -121,6 +121,9 @@ pipe_list = []
 SPAWNPIPE = pygame.USEREVENT
 pygame.time.set_timer(SPAWNPIPE, 1200)
 pipe_height = [200, 300, 400]
+
+game_over_surface = pygame.image.load('assets/message.png').convert_alpha()
+game_over_rect = game_over_surface.get_rect(center=(144, 256))
 
 while True:
     for event in pygame.event.get():
@@ -175,6 +178,7 @@ while True:
     else:
         high_score = update_highscore(score, high_score)
         # score = 0
+        screen.blit(game_over_surface, game_over_rect)
 
     score_display(game_active)
 
