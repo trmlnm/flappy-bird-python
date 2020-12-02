@@ -22,7 +22,8 @@ def create_pipe():
 def move_pipes(pipes):
     for pipe in pipes:
         pipe.centerx -= 5
-    return pipes
+    visible_pipes = [pipe for pipe in pipes if pipe.right > -50]
+    return visible_pipes
 
 
 def draw_pipes(pipes):
@@ -96,7 +97,6 @@ def pipe_score_check():
                 can_score = True
 
 
-pygame.mixer.pre_init(frequency=44100, size=32, channels=1, buffer=1024)
 pygame.init()
 
 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
