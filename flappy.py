@@ -82,6 +82,20 @@ def update_highscore(score, high_score):
     return high_score
 
 
+def pipe_score_check():
+    global score, can_score
+    if pipe_list:
+        for pipe in pipe_list:
+            if 95 < pipe.centerx < 105:
+                if can_score:
+                    score += 1
+                    can_score = False
+                    score_sound.play()
+
+            if pipe.centerx < 0:
+                can_score = True
+
+
 pygame.mixer.pre_init(frequency=44100, size=32, channels=1, buffer=1024)
 pygame.init()
 
@@ -99,6 +113,7 @@ game_active = True
 
 score = 0
 high_score = 0
+can_score = True
 
 bg_surface = pygame.image.load('assets/background-day.png').convert()
 floor_surface = pygame.image.load('assets/base.png').convert()
@@ -127,7 +142,7 @@ game_over_rect = game_over_surface.get_rect(center=(144, 256))
 
 flap_sound = pygame.mixer.Sound('sound/sfx_wing.wav')
 death_sound = pygame.mixer.Sound('sound/sfx_hit.wav')
-#score_sound = pygame.mixer.Sound('sound/sfx_point.wav')
+score_sound = pygame.mixer.Sound('sound/sfx_point.wav')
 
 
 while True:
@@ -151,6 +166,7 @@ while True:
                 bird_movement = 0
                 score = 0
                 game_active = True
+                can_score = True
 
         if event.type == SPAWNPIPE:
             # print("pipe")
@@ -179,8 +195,8 @@ while True:
         draw_pipes(pipe_list)
 
         # Score
-        score += 0.01
-        # score_display()
+        pipe_score_check()
+
     else:
         high_score = update_highscore(score, high_score)
         # score = 0
