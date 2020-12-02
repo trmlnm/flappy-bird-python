@@ -56,10 +56,37 @@ def bird_animation():
     return new_bird, new_bird_rect
 
 
+def score_display(game_active):
+    if game_active:
+        score_surface = game_font.render(
+            (str(int(score))), True, (255, 255, 255))
+        score_rect = score_surface.get_rect(center=(144, 50))
+        screen.blit(score_surface, score_rect)
+    else:
+        score_surface = game_font.render(
+            f'Score: {int(score)}', True, (255, 255, 255))
+        score_rect = score_surface.get_rect(center=(144, 50))
+        screen.blit(score_surface, score_rect)
+
+        high_score_surface = game_font.render(
+            f'High Score: {int(high_score)}', True, (255, 255, 255))
+        high_score_rect = high_score_surface.get_rect(center=(144, 425))
+        screen.blit(high_score_surface, high_score_rect)
+
+
+def update_highscore(score, high_score):
+    if score > high_score:
+        high_score = score
+
+    return high_score
+
+
 pygame.init()
 
 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
 clock = pygame.time.Clock()
+
+game_font = pygame.font.Font('04B_19.TTF', 40)
 
 # Game Variables
 
@@ -68,12 +95,15 @@ bird_movement = 0
 
 game_active = True
 
+score = 0
+high_score = 0
+
 bg_surface = pygame.image.load('assets/background-day.png').convert()
 floor_surface = pygame.image.load('assets/base.png').convert()
 floor_x_pos = 0
 
-#bird_surface = pygame.image.load('assets/bluebird-midflap.png').convert()
-#bird_rect = bird_surface.get_rect(center=(50, 256))
+# bird_surface = pygame.image.load('assets/bluebird-midflap.png').convert()
+# bird_rect = bird_surface.get_rect(center=(50, 256))
 
 bird_downflap = pygame.image.load('assets/bluebird-downflap.png').convert()
 bird_midflap = pygame.image.load('assets/bluebird-midflap.png').convert()
@@ -110,6 +140,7 @@ while True:
                 pipe_list.clear()
                 bird_rect.center = (50, 256)
                 bird_movement = 0
+                score = 0
                 game_active = True
 
         if event.type == SPAWNPIPE:
@@ -137,6 +168,15 @@ while True:
         # Pipes
         pipe_list = move_pipes(pipe_list)
         draw_pipes(pipe_list)
+
+        # Score
+        score += 0.01
+        # score_display()
+    else:
+        high_score = update_highscore(score, high_score)
+        # score = 0
+
+    score_display(game_active)
 
     # Floor
     floor_x_pos -= 1
