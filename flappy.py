@@ -87,7 +87,7 @@ def pipe_score_check():
     global score, can_score
     if pipe_list:
         for pipe in pipe_list:
-            if 95 < pipe.centerx < 105:
+            if 48 < pipe.centerx < 52:
                 if can_score:
                     score += 1
                     can_score = False
